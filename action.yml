@@ -1,0 +1,57 @@
+name: 'Voidly Pay — pay any x402 endpoint'
+description: 'Pay any HTTP 402 endpoint from CI using Voidly Pay. Signs Ed25519 envelopes, settles atomically, returns the response. USDC-backed on Base mainnet.'
+author: 'Voidly'
+branding:
+  icon: 'dollar-sign'
+  color: 'green'
+
+inputs:
+  url:
+    description: 'URL to fetch. If the server returns HTTP 402 with a Voidly Pay quote, this Action pays + retries automatically.'
+    required: true
+  method:
+    description: 'HTTP method.'
+    required: false
+    default: 'GET'
+  body:
+    description: 'JSON body (POST/PUT). Pass as a string; will be sent with content-type: application/json.'
+    required: false
+    default: ''
+  max-amount-credits:
+    description: 'Soft cap on a single auto-pay (in credits, where 1 credit = $0.000001 sandbox or 1 USDC Stage 2). Default 0.05 = $0.05.'
+    required: false
+    default: '0.05'
+  voidly-pay-secret:
+    description: 'Base64 64-byte Ed25519 secret key for the agent paying. Set via Repository → Settings → Secrets. If empty, the Action mints a fresh keypair and persists it to the runner''s ~/.voidly-pay/keypair.json (lost when the runner shuts down — set the secret for repeatable identity).'
+    required: false
+    default: ''
+  api-url:
+    description: 'Voidly Pay API base. Defaults to https://api.voidly.ai.'
+    required: false
+    default: 'https://api.voidly.ai'
+  output-path:
+    description: 'Path to write the response body to (relative to GITHUB_WORKSPACE). If empty, body is printed to stdout only.'
+    required: false
+    default: ''
+  fail-on-non-2xx:
+    description: 'Fail the step when the final response status is not 2xx. Default true.'
+    required: false
+    default: 'true'
+
+outputs:
+  status:
+    description: 'Final HTTP status code (after pay-and-retry).'
+  did:
+    description: 'The DID that paid this call.'
+  transfer-id:
+    description: 'The transfer ID of the settled payment, if a payment was made.'
+  amount-credits:
+    description: 'Credits paid for the call.'
+  body:
+    description: 'Response body (truncated to 32KB).'
+  receipt-json:
+    description: 'Full receipt JSON: { status, did, transfer_id, quote_id, amount_micro, paid, body }.'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
