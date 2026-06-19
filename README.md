@@ -70,7 +70,7 @@ Without the secret the runner mints a fresh DID each run. Fine for one-off probe
 
 ## Live now
 
-- **Vault**: [`0xb592512932a7b354969bb48039c2dc7ad6ad1c12`](https://basescan.org/address/0xb592512932a7b354969bb48039c2dc7ad6ad1c12) (Sourcify exact_match)
+- **Vault**: [`0xd25d3c6f32886b65356cc5c700382a8a02d84df5`](https://basescan.org/address/0xd25d3c6f32886b65356cc5c700382a8a02d84df5) (Sourcify exact_match)
 - **Public proof of reserves**: <https://api.voidly.ai/v1/pay/proof>
 - **Marketplace**: <https://voidly.ai/pay/marketplace>
 - **Stack guides**: <https://voidly.ai/pay/for-builders>
